@@ -13,7 +13,7 @@ export interface AnalysisResponse {
 export enum Section {
   HOME = 'home',
   ANALYZER = 'analyzer',
-  ABOUT = 'about',
+  OVERVIEW = 'overview',
   METHODOLOGY = 'methodology',
   RESULTS = 'results',
   TEAM = 'team'

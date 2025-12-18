@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Analyzer from './components/Analyzer';
-import { HomeSection, AboutSection, MethodologySection, ResultsSection, TeamSection } from './components/ProjectSections';
+import { HomeSection, OverviewSection, MethodologySection, ResultsSection, TeamSection } from './components/ProjectSections';
 import { Section } from './types';
 
 const App: React.FC = () => {
   const [currentSection, setCurrentSection] = useState<Section>(Section.HOME);
   
-  // Initialize theme from localStorage or system preference
   const [isDark, setIsDark] = useState(() => {
     const saved = localStorage.getItem('theme');
     if (saved) return saved === 'dark';
@@ -33,8 +32,8 @@ const App: React.FC = () => {
         return <HomeSection setSection={setCurrentSection} />;
       case Section.ANALYZER:
         return <Analyzer />;
-      case Section.ABOUT:
-        return <AboutSection />;
+      case Section.OVERVIEW:
+        return <OverviewSection />;
       case Section.METHODOLOGY:
         return <MethodologySection />;
       case Section.RESULTS:
@@ -55,16 +54,13 @@ const App: React.FC = () => {
         toggleTheme={toggleTheme}
       />
       
-      {/* Main Content Area */}
       <main className="lg:pl-64 min-h-screen flex flex-col">
-        {/* Top Header - Mobile only */}
         <header className="h-16 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 lg:hidden bg-white/80 dark:bg-[#0f172a]/90 backdrop-blur z-40 sticky top-0 transition-colors duration-300">
           <span className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-cyan-500 dark:from-blue-400 dark:to-cyan-300">
             Amartya
           </span>
         </header>
 
-        {/* Dynamic Content */}
         <div className="flex-1 p-4 lg:p-12 overflow-y-auto">
           <div className="animate-in fade-in duration-500 h-full">
             {renderSection()}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Section } from '../types';
-import { BrainCircuit, Activity, Users, FileText, BarChart3, Home, Sun, Moon } from 'lucide-react';
+import { BrainCircuit, Activity, Users, FileText, BarChart3, Home, Sun, Moon, Info } from 'lucide-react';
 
 interface NavbarProps {
   currentSection: Section;
@@ -13,10 +13,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentSection, setSection, isDark, tog
   const navItems = [
     { id: Section.HOME, label: 'Home', icon: Home },
     { id: Section.ANALYZER, label: 'Live Analyzer', icon: Activity },
-    { id: Section.ABOUT, label: 'About Project', icon: FileText },
+    { id: Section.OVERVIEW, label: 'Introduction', icon: Info },
     { id: Section.METHODOLOGY, label: 'Methodology', icon: BrainCircuit },
-    { id: Section.RESULTS, label: 'Results', icon: BarChart3 },
-    { id: Section.TEAM, label: 'Team', icon: Users },
+    { id: Section.RESULTS, label: 'Results & Output', icon: BarChart3 },
+    { id: Section.TEAM, label: 'Team & Refs', icon: Users },
   ];
 
   return (
@@ -68,13 +68,10 @@ const Navbar: React.FC<NavbarProps> = ({ currentSection, setSection, isDark, tog
               </span>
             </div>
           </div>
-
-          {/* Custom Visual Switch */}
           <div className="hidden lg:block w-10 h-5 rounded-full bg-slate-300 dark:bg-slate-600 relative transition-colors duration-300 group-hover:bg-slate-400 dark:group-hover:bg-slate-500">
             <div className={`absolute top-1 left-1 w-3 h-3 rounded-full bg-white shadow-sm transition-transform duration-300 ${isDark ? 'translate-x-5' : 'translate-x-0'}`}></div>
           </div>
         </div>
-
         <p className="hidden lg:block text-[10px] text-slate-400 dark:text-slate-600 text-center mt-4 font-medium uppercase tracking-wider">
           AIML • 2025-26
         </p>

@@ -9,12 +9,18 @@ export const analyzeTextEmotion = async (text: string): Promise<AnalysisResponse
     throw new Error("API Key is missing. Please check your environment configuration.");
   }
 
-  const model = "gemini-2.5-flash";
+  const model = "gemini-3-flash-preview";
 
   const systemInstruction = `
-    You are an advanced Emotion Analysis Engine mimicking a dataset-driven classifier trained on the GoEmotions dataset.
-    Your task is to classify the emotion of the input text into one of these categories: Joy, Sadness, Anger, Fear, Surprise, Neutral, Love, Optimism.
-    Provide a probability distribution, the top emotion, and a brief reasoning based on linguistic cues (keywords, context, sarcasm).
+    You are an advanced Emotion Analysis Engine mimicking the behavior of a SGDClassifier model trained on the GoEmotions dataset with TF-IDF vectorization.
+    
+    Your goal is to perform multi-class emotion detection on input text.
+    Categories (aligning with project scope): Joy, Sadness, Anger, Fear, Surprise, Neutral, Love, Optimism.
+    
+    Return:
+    1. A probability distribution across these categories (scores sum to approx 1.0).
+    2. The top emotion.
+    3. A brief reasoning that explains linguistic cues like tokens, sarcasm, or stemming roots (e.g. "detected 'thrill' keyword which stems to 'thrill' root, high weight in TF-IDF").
   `;
 
   try {
@@ -27,16 +33,16 @@ export const analyzeTextEmotion = async (text: string): Promise<AnalysisResponse
         responseSchema: {
           type: Type.OBJECT,
           properties: {
-            topEmotion: { type: Type.STRING, description: "The dominant emotion detected" },
-            confidence: { type: Type.NUMBER, description: "Confidence score of top emotion (0-1)" },
-            reasoning: { type: Type.STRING, description: "Brief explanation of why this emotion was chosen" },
+            topEmotion: { type: Type.STRING },
+            confidence: { type: Type.NUMBER },
+            reasoning: { type: Type.STRING },
             distribution: {
               type: Type.ARRAY,
               items: {
                 type: Type.OBJECT,
                 properties: {
                   emotion: { type: Type.STRING },
-                  score: { type: Type.NUMBER, description: "Probability score (0-1)" }
+                  score: { type: Type.NUMBER }
                 }
               }
             }
@@ -49,13 +55,11 @@ export const analyzeTextEmotion = async (text: string): Promise<AnalysisResponse
     if (!resultText) throw new Error("No response from AI");
 
     const parsed = JSON.parse(resultText) as AnalysisResponse;
-    // Sort distribution by score descending
     parsed.distribution.sort((a, b) => b.score - a.score);
     return parsed;
 
   } catch (error) {
     console.error("Emotion analysis failed:", error);
-    // Fallback mock data in case of critical failure to prevent app crash
     return {
       topEmotion: "Error",
       confidence: 0,
